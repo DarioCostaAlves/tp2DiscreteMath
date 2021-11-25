@@ -2,6 +2,18 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+"""
+FUNCTIONS
+"""
+def colored(r, g, b, text):
+
+    """
+    This function will colored the print message with the pretended color.
+    The objetive of it is to define the type of printed message (SUCCESS, ERROR, WARNING, etc.).
+    """
+
+    return "\033[38;2;{};{};{}m{} \033[38;2;255;255;255m".format(r, g, b, text)
+
 def solveEquation(v0, g, t):
     """
     This function will calculate the mathematical equation 
@@ -37,15 +49,21 @@ def build2DGraph(v0,g,it,ft):
 
     #Naming title and labels
     ax.set_title("Variation of y in a Time Interval")
-    ax.legend(("Height","dawd"))
+    ax.legend(['y(t)'])
     ax.set_xlabel("Time interval(t)")
     ax.set_ylabel("Height(y)")
     
     #show the plot
     plt.show()
 
+"""
+CUSTOM EXCEPTIONS
+"""
+#Exception for time interval 
+class IntervalError(Exception):
+    pass
 
-    
+
 #Creating 'menu' array
 menu = {}
 
@@ -88,9 +106,12 @@ while True:
                     raise ValueError
 
             except ValueError:            
-                print("Please, insert only positive numbers.")
+                print(colored(255,0,0,"ERROR:"),"only positive numbers are accepted.")
+                print()
             else:
                 solveEquation(v0,g,t)
+                print(colored(0,255,0,"SUCCESS!"),"Mathematical equation solved.")
+                print()
                 break 
                 
     elif selected == 'b':
@@ -105,22 +126,33 @@ while True:
                 initialTime = float(input("Insert initial time interval(t): "))
                 finalTime = float(input("Insert final time interval(t): "))
 
-                if v0 < 0 or g < 0 or finalTime < 0:
+                if v0 < 0 or g < 0 or initialTime < 0 or finalTime < 0:
                     raise ValueError
 
+                if(finalTime <= initialTime):
+                    raise IntervalError
+
             except ValueError:
-                print("Please, insert only positive numbers.")
+                print(colored(255,0,0,"ERROR:"), "only positive numbers are accepted.")
+                print()
+            except IntervalError:
+                print(colored(255,0,0,"ERROR:"), "final time must be higher than initial time.")
+                print()
             else:
                 build2DGraph(v0,g,initialTime,finalTime)
+                print(colored(0,255,0,"SUCCESS!"),"2D graph generated.")
+                print()
                 break
 
     elif selected == 'c':
-        print("Exercise c - 3D Graph")
+        print("\nExercise c - 3D Graph")
         print("---------------------------------------------")
    
     elif selected == 'd':
         break
     
     else: 
-        print("\nInvalid Option Selected!")
+        print(colored(255,0,0,"ERROR:"),"invalid selected option.")
+        print()
+
 
