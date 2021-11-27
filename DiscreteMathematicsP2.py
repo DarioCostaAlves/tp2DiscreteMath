@@ -1,6 +1,10 @@
 #Imports
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm
+import pandas as pan
+
 
 """
 FUNCTIONS
@@ -147,7 +151,51 @@ while True:
     elif selected == 'c':
         print("\nExercise c - 3D Graph")
         print("---------------------------------------------")
-   
+
+        while True:
+            try:
+
+                #Creating a new figure
+                fig = plt.figure(figsize=(16,9))
+                #Adding axes to the current figure and make it the current axes
+                #In this case 3D axes object
+                ax = plt.axes(projection="3d")
+        
+                #Read csv file 'data.csv' only 3 first columns with respective names: 'x','y','z' and warn that have no headers
+                df = pan.read_csv('data.csv', names=['x','y','z'],header=None,usecols=[0,1,2])
+        
+                x=df["x"]
+                y=df["y"]
+                z=df["z"]
+
+
+                #Creating plot
+                trisurf = ax.plot_trisurf(x,y,z,
+                                          cmap=cm.hot,
+                                          linewidth = 0.0, 
+                                          antialiased=True,
+                                          edgecolor='grey')
+
+                #Add a color bar corresponding to the values
+                fig.colorbar(trisurf,ax=ax, shrink=0.5, aspect=5)
+                #Set a title
+                ax.set_title('Tri-surface plot', fontweight='bold')
+                #Add labels
+                ax.set_xlabel('X-axis', fontweight='bold')
+                ax.set_ylabel('Y-axis', fontweight='bold')
+                ax.set_zlabel('Z-axis', fontweight='bold')
+                
+            except FileNotFoundError:
+                print(colored(255,0,0,"ERROR:"),"File not found.")
+                print()
+                break
+            else:
+                #Show plot
+                plt.show()
+                print(colored(0,255,0,"SUCCESS!"),"3D graph generated.")
+                print()
+                break
+
     elif selected == 'd':
         break
     
