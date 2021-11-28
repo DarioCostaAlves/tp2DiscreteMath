@@ -52,14 +52,50 @@ def build2DGraph(v0,g,it,ft):
     lines = plt.plot(ti,y)
 
     #Naming title and labels
-    ax.set_title("Variation of y in a Time Interval")
+    ax.set_title("Variation of y in a Time Interval", fontweight='bold')
     ax.legend(['y(t)'])
-    ax.set_xlabel("Time interval(t)")
-    ax.set_ylabel("Height(y)")
+    ax.set_xlabel("Time interval(t)", fontweight='bold')
+    ax.set_ylabel("Height(y)", fontweight='bold')
     
-    #show the plot
+    #Show the plot
     plt.show()
 
+def build3DGraph(x,y,z):
+
+    """
+    This function will generate the 3D graph using plot_trisurf 
+    that generates a Tri-Surface Plot (created by triangulation of compact surfaces of finite number of triangles).
+    This method have as a paramaters the X,Y and Z axis.
+    """
+
+    #Creating a new figure
+    fig = plt.figure(figsize=(16,9))
+    
+    #Adding axes to the current figure and make it the current axes
+    #In this case 3D axes object
+    ax = plt.axes(projection="3d")
+        
+    #Creating plot
+    trisurf = ax.plot_trisurf(x,y,z,
+                            cmap=cm.hot,
+                            linewidth = 0.0, 
+                            antialiased=True,
+                            edgecolor='grey')
+
+    #Add a color bar corresponding to the values
+    fig.colorbar(trisurf,ax=ax, shrink=0.5, aspect=5)
+
+    #Set a title
+    ax.set_title('Tri-surface plot', fontweight='bold')
+
+    #Add labels
+    ax.set_xlabel('X-axis', fontweight='bold')
+    ax.set_ylabel('Y-axis', fontweight='bold')
+    ax.set_zlabel('Z-axis', fontweight='bold')  
+
+    #Show the plot
+    plt.show()                        
+    
 """
 CUSTOM EXCEPTIONS
 """
@@ -155,43 +191,19 @@ while True:
         while True:
             try:
 
-                #Creating a new figure
-                fig = plt.figure(figsize=(16,9))
-                #Adding axes to the current figure and make it the current axes
-                #In this case 3D axes object
-                ax = plt.axes(projection="3d")
-        
                 #Read csv file 'data.csv' only 3 first columns with respective names: 'x','y','z' and warn that have no headers
                 df = pan.read_csv('data.csv', names=['x','y','z'],header=None,usecols=[0,1,2])
-        
+                    
                 x=df["x"]
                 y=df["y"]
                 z=df["z"]
 
-
-                #Creating plot
-                trisurf = ax.plot_trisurf(x,y,z,
-                                          cmap=cm.hot,
-                                          linewidth = 0.0, 
-                                          antialiased=True,
-                                          edgecolor='grey')
-
-                #Add a color bar corresponding to the values
-                fig.colorbar(trisurf,ax=ax, shrink=0.5, aspect=5)
-                #Set a title
-                ax.set_title('Tri-surface plot', fontweight='bold')
-                #Add labels
-                ax.set_xlabel('X-axis', fontweight='bold')
-                ax.set_ylabel('Y-axis', fontweight='bold')
-                ax.set_zlabel('Z-axis', fontweight='bold')
-                
             except FileNotFoundError:
-                print(colored(255,0,0,"ERROR:"),"File not found.")
+                print(colored(255,0,0,"ERROR:"),".csv File not found.")
                 print()
                 break
             else:
-                #Show plot
-                plt.show()
+                build3DGraph(x,y,z)
                 print(colored(0,255,0,"SUCCESS!"),"3D graph generated.")
                 print()
                 break
